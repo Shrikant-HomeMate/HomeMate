@@ -4,51 +4,195 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f46e5">
-<meta name="description" content="HomeMate - Need it? Add it. Someone gets it.">
-<link rel="manifest" href="manifest.json">
 <title>HomeMate</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f7fb;color:#171827}
-.app{max-width:520px;margin:auto;min-height:100vh;background:#fff}.top{padding:24px 20px 14px;position:sticky;top:0;background:#fff;z-index:5;border-bottom:1px solid #eee}
-.brand{font-size:28px;font-weight:800;letter-spacing:-.7px}.tag{color:#6b6d7a;font-size:13px;margin-top:3px}
-.nav{display:flex;gap:8px;overflow:auto;padding:12px 20px;border-bottom:1px solid #eee;position:sticky;top:82px;background:#fff;z-index:4}.nav button{border:0;background:#f0f1f6;padding:9px 13px;border-radius:20px;white-space:nowrap}.nav button.active{background:#4f46e5;color:#fff}
-main{padding:18px 20px 90px}.card{border:1px solid #e8e8ee;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px #00000008}.hero{background:#eef2ff;border:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{padding:16px;border-radius:16px;background:#f7f7fa}.stat b{font-size:24px;display:block}.muted{color:#70727e;font-size:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.item{padding:13px 0;border-bottom:1px solid #eee}.item:last-child{border-bottom:0}button.primary,button.small{border:0;background:#4f46e5;color:#fff;border-radius:12px;padding:11px 15px;font-weight:700}button.small{padding:8px 10px;font-size:12px}button.gray{border:0;background:#eeeef3;color:#333;border-radius:10px;padding:9px 11px}.input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin:7px 0 12px;font-size:15px}.empty{text-align:center;padding:35px 10px;color:#777}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#171827;color:#fff;padding:11px 15px;border-radius:12px;display:none;z-index:20}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f7f7fb;color:#171725}
+header{background:#fff;padding:24px 18px 14px;border-bottom:1px solid #e8e8ef;position:sticky;top:0;z-index:5}
+.brand{font-size:30px;font-weight:800}.tag{color:#70707d;margin-top:3px}
+nav{display:flex;gap:8px;overflow:auto;margin-top:16px}nav button{border:0;background:#f0f0f6;border-radius:24px;padding:11px 17px;font-size:15px;white-space:nowrap}
+nav button.active{background:#4f46e5;color:#fff}
+main{max-width:760px;margin:auto;padding:18px}.hero{background:#eef1ff;border-radius:24px;padding:22px;margin-bottom:16px}.hero h1{margin:0 0 8px;font-size:28px}.hero p{margin:0;color:#686878;line-height:1.45}
+button.primary{background:#4f46e5;color:#fff;border:0;border-radius:14px;padding:13px 18px;font-size:16px;font-weight:700;margin-top:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#fff;border:1px solid #e8e8ee;border-radius:20px;padding:18px;margin-bottom:12px}.num{font-size:28px;font-weight:800}.muted{color:#737380}.item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid #eee}.item:last-child{border-bottom:0}.item b{font-size:17px}.badge{font-size:12px;padding:6px 9px;border-radius:12px;background:#eee}.picked{background:#e9e7ff;color:#4137a8}.done{background:#e5f7ea;color:#19713a}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row button{border:0;border-radius:11px;padding:9px 12px;font-weight:600}
+input,select{width:100%;padding:13px;border:1px solid #d9d9e3;border-radius:12px;background:#fff;font-size:16px;margin:6px 0 12px}
+label{font-size:14px;font-weight:700}.small{font-size:13px}.danger{color:#b42318}.success{color:#16703b}.hidden{display:none!important}
+.toast{position:fixed;left:16px;right:16px;bottom:18px;background:#171725;color:#fff;padding:14px 16px;border-radius:14px;z-index:20;display:none}
+footer{text-align:center;color:#888;padding:20px;font-size:12px}
 </style>
 </head>
 <body>
-<div class="app">
-<header class="top"><div class="brand">HomeMate</div><div class="tag">Need it? Add it. Someone gets it.</div></header>
-<nav class="nav">
-<button class="active" onclick="show('home',this)">Home</button><button onclick="show('list',this)">Shopping</button><button onclick="show('expense',this)">Expenses</button><button onclick="show('family',this)">Family</button>
-</nav>
-<main id="main"></main>
-<div id="toast" class="toast"></div>
-</div>
-<script>
-const KEY='homemate_v1';
-let data=JSON.parse(localStorage.getItem(KEY)||'{"items":[],"expenses":[],"family":["You"]}');
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
-function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',1800)}
-function show(page,btn){
- document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active')); if(btn)btn.classList.add('active');
- let m=document.getElementById('main');
- if(page==='home')m.innerHTML=`<div class="card hero"><h2 style="margin:0 0 6px">Your home, organised.</h2><div class="muted">Add what is needed. Someone can pick it up. No duplicate shopping.</div><br><button class="primary" onclick="show('add')">＋ Add item</button></div>
- <div class="grid"><div class="stat"><span class="muted">Pending</span><b>${data.items.filter(x=>x.status==='pending').length}</b></div><div class="stat"><span class="muted">Purchased</span><b>${data.items.filter(x=>x.status==='purchased').length}</b></div></div>
- <div class="card"><div class="row"><b>Recent items</b><button class="gray" onclick="show('list')">View all</button></div>${itemsHTML(data.items.slice(-5).reverse())}</div>
- <div class="card"><div class="row"><b>This month</b><strong>${money(data.expenses.reduce((a,x)=>a+Number(x.amount),0))}</strong></div><div class="muted">Track household spending and avoid unnecessary purchases.</div></div>`;
- else if(page==='add')m.innerHTML=`<div class="card"><h2>Add item</h2><label>What do you need?</label><input id="name" class="input" placeholder="e.g. Milk"><label>Quantity</label><input id="qty" class="input" placeholder="e.g. 2 litres"><label>Added by</label><input id="by" class="input" value="You"><button class="primary" onclick="addItem()">Add to family list</button></div>`;
- else if(page==='list')m.innerHTML=`<div class="row" style="margin-bottom:14px"><h2 style="margin:0">Shopping list</h2><button class="primary" onclick="show('add')">＋ Add</button></div><div class="card">${itemsHTML(data.items)}</div>`;
- else if(page==='expense')m.innerHTML=`<div class="card"><h2>Household expenses</h2><div class="stat"><span class="muted">Total recorded</span><b>${money(data.expenses.reduce((a,x)=>a+Number(x.amount),0))}</b></div><br><input id="edesc" class="input" placeholder="What did you buy?"><input id="eamount" class="input" type="number" placeholder="Amount ₹"><button class="primary" onclick="addExpense()">Add expense</button></div><div class="card"><b>Recent expenses</b>${data.expenses.slice().reverse().map(x=>`<div class="item"><div class="row"><span>${esc(x.desc)}</span><b>${money(x.amount)}</b></div></div>`).join('')||'<div class="empty">No expenses yet.</div>'}</div>`;
- else if(page==='family')m.innerHTML=`<div class="card"><h2>Family</h2><p class="muted">Demo family workspace. Firebase can be connected later for real-time sync between phones.</p><div class="item">👤 You</div><button class="primary" onclick="toast('Family invite coming in the Firebase version')">Invite family member</button></div>`;
- else if(page==='home'){}
+<header>
+  <div class="brand">HomeMate</div>
+  <div class="tag">Need it? Add it. Someone gets it.</div>
+  <nav>
+    <button data-tab="home" class="active">Home</button>
+    <button data-tab="shopping">Shopping</button>
+    <button data-tab="expenses">Expenses</button>
+    <button data-tab="family">Family</button>
+  </nav>
+</header>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <h1>Your home, organised.</h1>
+    <p>Add what is needed. Someone can pick it up. Everyone sees the same list in real time.</p>
+    <button class="primary" onclick="showTab('shopping');document.getElementById('itemName').focus()">＋ Add item</button>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="muted">Pending</div><div class="num" id="pending">0</div></div>
+    <div class="card"><div class="muted">Purchased</div><div class="num" id="purchased">0</div></div>
+  </div>
+  <div class="card"><b>Recent items</b><div id="recent"></div></div>
+  <div class="card"><div class="muted">This month</div><div class="num" id="monthTotal">₹0</div><div class="muted">Track household spending and avoid unnecessary purchases.</div></div>
+</section>
+
+<section id="shopping" class="hidden">
+  <div class="card">
+    <h2>Add shopping item</h2>
+    <label>Item</label><input id="itemName" placeholder="e.g. Rice">
+    <label>Quantity</label><input id="itemQty" placeholder="e.g. 5 kg">
+    <button class="primary" onclick="addItem()">Add to family list</button>
+    <div class="small muted" style="margin-top:10px">Family: <b id="familyLabel">Not set</b></div>
+  </div>
+  <div class="card"><h2>Shopping list</h2><div id="items"></div></div>
+</section>
+
+<section id="expenses" class="hidden">
+  <div class="card"><h2>Household spending</h2><div class="num" id="expenseTotal">₹0</div><div class="muted">Total purchased items in this family.</div></div>
+  <div class="card"><h2>Purchased items</h2><div id="purchasedList"></div></div>
+</section>
+
+<section id="family" class="hidden">
+  <div class="card">
+    <h2>Family</h2>
+    <p class="muted">Use the same Family ID on every family member's phone. For now this is a simple test family code; we will add secure invite links later.</p>
+    <label>Family ID</label>
+    <input id="familyIdInput" placeholder="e.g. deshmukh-home">
+    <button class="primary" onclick="changeFamily()">Save Family ID</button>
+    <p class="small muted">Signed in: <span id="uid"></span></p>
+  </div>
+</section>
+</main>
+<footer>HomeMate • Firebase real-time prototype</footer>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, updateDoc, doc, onSnapshot,
+  query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNYAQSmsWNei-1XReLVGBnc7WHN-0Gi4A",
+  authDomain: "homemate-16f97.firebaseapp.com",
+  projectId: "homemate-16f97",
+  storageBucket: "homemate-16f97.firebasestorage.app",
+  messagingSenderId: "446802934219",
+  appId: "1:446802934219:web:9fcdd2a64cb5338d9b5e4e"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let user=null, items=[], familyId=localStorage.getItem("homemate_family") || "my-family", unsubscribe=null;
+
+const $=id=>document.getElementById(id);
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
+function toast(t){$("toast").textContent=t;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2500)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+window.showTab=(tab)=>{
+  document.querySelectorAll("main>section").forEach(s=>s.classList.add("hidden"));
+  $(tab).classList.remove("hidden");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  render();
 }
-function itemsHTML(arr){return arr.length?arr.map(x=>`<div class="item"><div class="row"><div><b>${esc(x.name)}</b><div class="muted">${esc(x.qty||'')} · ${esc(x.by||'You')}</div>${x.pickedBy?`<div class="muted">Picked by ${esc(x.pickedBy)}</div>`:''}</div><div>${x.status==='pending'?`<button class="small" onclick="pickItem('${x.id}')">Pick</button>`:`<span class="muted">✓ ${x.status}</span>`}</div></div></div>`).join(''):'<div class="empty">No items yet.<br>Add something your family needs.</div>'}
-function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function addItem(){let n=document.getElementById('name').value.trim();if(!n)return toast('Enter an item');let q=document.getElementById('qty').value.trim(),b=document.getElementById('by').value.trim()||'You';let duplicate=data.items.find(x=>x.name.toLowerCase()===n.toLowerCase()&&x.status!=='purchased');if(duplicate){toast('Already on the list — duplicate avoided');show('list');return}data.items.push({id:Date.now().toString(),name:n,qty:q,by:b,status:'pending'});save();toast('Added to family list');show('list')}
-function pickItem(id){let x=data.items.find(i=>i.id===id);if(!x)return;if(x.pickedBy){toast('Already picked');return}x.pickedBy='You';x.status='picked';save();toast('You picked it');show('list')}
-function addExpense(){let d=document.getElementById('edesc').value.trim(),a=Number(document.getElementById('eamount').value);if(!d||!a)return toast('Enter item and amount');data.expenses.push({desc:d,amount:a,date:new Date().toISOString()});save();toast('Expense added');show('expense')}
-show('home');
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+function listen(){
+  if(unsubscribe) unsubscribe();
+  $("familyLabel").textContent=familyId;
+  const q=query(collection(db,"families",familyId,"items"),orderBy("createdAt","desc"));
+  unsubscribe=onSnapshot(q,snap=>{
+    items=snap.docs.map(d=>({id:d.id,...d.data()}));
+    render();
+  },err=>toast("Firestore error: "+err.message));
+}
+window.changeFamily=()=>{
+  const v=$("familyIdInput").value.trim().replace(/\s+/g,"-").toLowerCase();
+  if(!v){toast("Enter a Family ID");return}
+  familyId=v;localStorage.setItem("homemate_family",familyId);listen();toast("Family changed to "+familyId);
+}
+window.addItem=async()=>{
+  const name=$("itemName").value.trim(), qty=$("itemQty").value.trim();
+  if(!name){toast("Enter an item name");return}
+  // Warn if an active item with same name already exists.
+  const existing=items.find(x=>String(x.name).toLowerCase()===name.toLowerCase() && x.status!=="purchased");
+  if(existing){toast("⚠️ This item is already on the list.");return}
+  await addDoc(collection(db,"families",familyId,"items"),{
+    name, qty, status:"pending", pickedBy:null, pickedAt:null, price:0,
+    addedBy:user?.uid||"unknown", createdAt:serverTimestamp()
+  });
+  $("itemName").value="";$("itemQty").value="";toast("Item added for the family");
+}
+window.pickItem=async(id)=>{
+  const x=items.find(i=>i.id===id); if(!x)return;
+  if(x.status==="picked" && x.pickedBy!==user.uid){toast("⚠️ Already picked by another family member.");return}
+  if(x.status==="purchased"){toast("Already purchased.");return}
+  await updateDoc(doc(db,"families",familyId,"items",id),{status:"picked",pickedBy:user.uid,pickedAt:serverTimestamp()});
+  toast("You picked this item");
+}
+window.purchaseItem=async(id)=>{
+  const x=items.find(i=>i.id===id); if(!x)return;
+  if(x.pickedBy && x.pickedBy!==user.uid){toast("Only the person who picked it can mark it purchased.");return}
+  const p=prompt("Actual price paid (₹):",x.price||"");
+  if(p===null)return;
+  const price=Number(p); if(!Number.isFinite(price)||price<0){toast("Enter a valid price");return}
+  await updateDoc(doc(db,"families",familyId,"items",id),{status:"purchased",price,purchasedAt:serverTimestamp()});
+  toast("Purchase saved");
+}
+
+function render(){
+  $("familyLabel").textContent=familyId;
+  $("familyIdInput").value=familyId;
+  $("uid").textContent=user?.uid||"";
+  const pending=items.filter(x=>x.status!=="purchased").length;
+  const purchased=items.filter(x=>x.status==="purchased").length;
+  const total=items.filter(x=>x.status==="purchased").reduce((s,x)=>s+Number(x.price||0),0);
+  $("pending").textContent=pending;$("purchased").textContent=purchased;$("monthTotal").textContent=money(total);$("expenseTotal").textContent=money(total);
+
+  $("recent").innerHTML=items.slice(0,5).map(x=>`
+    <div class="item"><div><b>${esc(x.name)}</b><div class="muted small">${esc(x.qty||"")}</div></div>
+    <span class="badge ${x.status==="picked"?"picked":x.status==="purchased"?"done":""}">${x.status==="picked"?"✓ picked":x.status==="purchased"?"✓ purchased":"pending"}</span></div>`).join("") || '<p class="muted">No items yet.</p>';
+
+  $("items").innerHTML=items.map(x=>{
+    const mine=x.pickedBy===user?.uid;
+    const status=x.status==="picked" ? (mine?"Picked by you":"Already picked") : x.status==="purchased"?"Purchased":"Available";
+    return `<div class="item"><div><b>${esc(x.name)}</b><div class="muted">${esc(x.qty||"")} • ${status}</div></div>
+      <div class="row">
+      ${x.status==="pending"?`<button onclick="pickItem('${x.id}')">Pick</button>`:""}
+      ${x.status==="picked"&&mine?`<button onclick="purchaseItem('${x.id}')">Purchased</button>`:""}
+      ${x.status==="purchased"?`<span class="badge done">${money(x.price)}</span>`:""}
+      </div></div>`}).join("") || '<p class="muted">No shopping items.</p>';
+
+  $("purchasedList").innerHTML=items.filter(x=>x.status==="purchased").map(x=>`
+    <div class="item"><div><b>${esc(x.name)}</b><div class="muted">${esc(x.qty||"")}</div></div><b>${money(x.price)}</b></div>`).join("") || '<p class="muted">No purchases yet.</p>';
+}
+
+(async()=>{
+  try{
+    const cred=await signInAnonymously(auth); user=cred.user;
+    listen();render();
+  }catch(e){
+    toast("Firebase login failed: "+e.message);
+    console.error(e);
+  }
+})();
 </script>
 </body>
 </html>
