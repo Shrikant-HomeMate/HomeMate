@@ -1,0 +1,42 @@
+importScripts('https://www.gstatic.com/firebasejs/13.1.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/13.1.0/firebase-messaging-compat.js');
+
+firebase.initializeApp({
+  apiKey: "AIzaSyBNYAQSmsWNei-1XReLVGBnc7WHN-0Gi4A",
+  authDomain: "homemate-16f97.firebaseapp.com",
+  projectId: "homemate-16f97",
+  storageBucket: "homemate-16f97.firebasestorage.app",
+  messagingSenderId: "446802934219",
+  appId: "1:446802934219:web:9fcdd2a64cb5338d9b5e4"
+});
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  const title = payload.notification?.title || "HomeMate";
+  const options = {
+    body: payload.notification?.body || "New HomeMate update",
+    data: payload.data || {}
+  };
+
+  self.registration.showNotification(title, options);
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  event.waitUntil(
+    clients.matchAll({
+      type: "window",
+      includeUncontrolled: true
+    }).then((clientList) => {
+      for (const client of clientList) {
+        if ("focus" in client) return client.focus();
+      }
+
+      if (clients.openWindow) {
+        return clients.openWindow("/HomeMate/");
+      }
+    })
+  );
+});
