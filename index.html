@@ -76,7 +76,6 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);c
 window.showTab=tab=>{document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(tab).classList.remove("hidden");document.querySelectorAll(".bottom button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="expenses")renderChart();window.scrollTo({top:0,behavior:"smooth"})};showTab("home");
 onAuthStateChanged(auth,u=>{user=u;if(u){document.getElementById("uid").textContent=u.uid;listen()}});signInAnonymously(auth).catch(e=>console.error(e));
 function path(){return collection(db,"families",familyId,"items")};let notificationListenerReady = false;
-
 function listen(){
   if(unsub) unsub();
 
@@ -96,9 +95,11 @@ function listen(){
 
         if(Notification.permission === "granted"){
 
-          new Notification("🛒 HomeMate", {
-            body: `${item.addedBy || "Someone"} ने ${item.name || "नवीन item"} add केला.`
-          });
+          navigator.serviceWorker.ready.then(reg => {
+  reg.showNotification("🛒 HomeMate", {
+    body: `${item.addedBy || "Someone"} ने ${item.name || "नवीन item"} add केला.`
+  });
+});
 
         }
 
