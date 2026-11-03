@@ -86,7 +86,7 @@ function itemCard(x){const status=x.status==="purchased"?'<span class="badge suc
 window.filterCategory=cat=>{currentFilter=cat;document.querySelectorAll("select.filter").forEach(s=>s.value=cat);showTab("shopping");render()};
 function renderChart(){const sums={};items.filter(x=>x.status==="purchased").forEach(x=>sums[x.category||"Other"]=(sums[x.category||"Other"]||0)+(Number(x.price)||0));const labels=Object.keys(sums),data=labels.map(k=>sums[k]);document.getElementById("chartEmpty").classList.toggle("hidden",data.length>0);document.getElementById("expenseChart").classList.toggle("hidden",data.length===0);if(chart)chart.destroy();if(!data.length)return;chart=new Chart(document.getElementById("expenseChart"),{type:"doughnut",data:{labels,datasets:[{data}]},options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{color:"#ddd"}}}}})}
 window.changeFamily=()=>{const id=document.getElementById("familyIdInput").value.trim();if(!id)return;familyId=id;localStorage.setItem("homemate_family",id);listen();alert("Family ID saved: "+id)};
-async function setupMessaging(){
+window.setupMessaging = async function(){
   try{
     if(!(await isSupported())){
       alert("Notifications are not supported on this browser.");
