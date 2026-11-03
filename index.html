@@ -69,7 +69,7 @@ main{max-width:1180px;margin:auto;padding:18px 24px 110px}.section-title{font-si
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-messaging.js";
 const firebaseConfig={apiKey:"AIzaSyBNYAQSmsWNei-1XReLVGBnc7WHN-0Gi4A",authDomain:"homemate-16f97.firebaseapp.com",projectId:"homemate-16f97",storageBucket:"homemate-16f97.firebasestorage.app",messagingSenderId:"446802934219",appId:"1:446802934219:web:9fcdd2a64cb5338d9b5e4"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);const vapidKey="BHLdJriqhNtpF5rDJwPhMGU0cisbXEs2IUmKss9LwNMdfomyQooKNuBcxNUeXl8osbmL2vmAGDgC1gicrL6JZHo";let messaging=null,user=null,items=[],unsub=null,chart=null,currentFilter="All";let familyId=localStorage.getItem("homemate_family")||"pande-home";document.getElementById("familyIdInput").value=familyId;
