@@ -86,7 +86,60 @@ function itemCard(x){const status=x.status==="purchased"?'<span class="badge suc
 window.filterCategory=cat=>{currentFilter=cat;document.querySelectorAll("select.filter").forEach(s=>s.value=cat);showTab("shopping");render()};
 function renderChart(){const sums={};items.filter(x=>x.status==="purchased").forEach(x=>sums[x.category||"Other"]=(sums[x.category||"Other"]||0)+(Number(x.price)||0));const labels=Object.keys(sums),data=labels.map(k=>sums[k]);document.getElementById("chartEmpty").classList.toggle("hidden",data.length>0);document.getElementById("expenseChart").classList.toggle("hidden",data.length===0);if(chart)chart.destroy();if(!data.length)return;chart=new Chart(document.getElementById("expenseChart"),{type:"doughnut",data:{labels,datasets:[{data}]},options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{color:"#ddd"}}}}})}
 window.changeFamily=()=>{const id=document.getElementById("familyIdInput").value.trim();if(!id)return;familyId=id;localStorage.setItem("homemate_family",id);listen();alert("Family ID saved: "+id)};
-async function setupMessaging(){try{if(!(await isSupported())){setNotifyStatus("This browser does not support web push notifications.");return}messaging=getMessaging(app);onMessage(messaging,p=>{const title=p.notification?.title||"HomeMate",body=p.notification?.body||"You have a new HomeMate notification.";if(Notification.permission==="granted")new Notification(title,{body})})}catch(e){console.error(e);setNotifyStatus("Notification setup error: "+e.message)}}function setNotifyStatus(t){const e=document.getElementById("notifyStatus");if(e)e.textContent=t}window.enableNotifications=async()=>{try{if(!messaging)await setupMessaging();if(!messaging)return;const permission=await Notification.requestPermission();if(permission!=="granted"){setNotifyStatus("Notification permission was not granted.");return}const reg=await navigator.serviceWorker.register("/HomeMate/firebase-messaging-sw.js");const token=await getToken(messaging,{vapidKey,serviceWorkerRegistration:reg});if(token){localStorage.setItem("homemate_fcm_token",token);setNotifyStatus("✅ Notifications enabled on this phone.")}else setNotifyStatus("Could not get a notification token.")}catch(e){console.error(e);setNotifyStatus("Notification error: "+e.message)}};setupMessaging();
+async function setupMessaging(){
+  try{
+    if(!(await isSupported())){
+      alert("Notifications are not supported on this browser.");
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+
+    if(permission !== "granted"){
+      alert("Notification permission denied.");
+      return;
+    }
+
+    const reg = await navigator.serviceWorker.register(
+      "/HomeMate/firebase-messaging-sw.js"
+    );
+
+    const messaging = getMessaging(app);
+
+    const token = await getToken(messaging,{
+      vapidKey,
+      serviceWorkerRegistration: reg
+    });
+
+    if(token){
+      localStorage.setItem("homemate_fcm_token",token);
+
+      const tokenHashBuffer = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(token)
+      );
+
+      const tokenHash = Array.from(
+        new Uint8Array(tokenHashBuffer)
+      ).map(b => b.toString(16).padStart(2,"0")).join("");
+
+      await setDoc(
+        doc(db,"families",familyId,"tokens",tokenHash),
+        {
+          token: token,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        },
+        {merge:true}
+      );
+
+      alert("Notifications enabled successfully 🔔");
+    }
+  }catch(e){
+    console.error(e);
+    alert("Notification setup failed: " + e.message);
+  }
+}
 </script>
 </body>
   </html>
