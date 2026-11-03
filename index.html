@@ -1,4 +1,6 @@
-<!doctype html>
+from pathlib import Path
+
+html = r'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -7,181 +9,432 @@
 <title>HomeMate</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{--bg:#000;--panel:#070707;--panel2:#0d0d0d;--line:#292929;--line2:#171717;--text:#f7f7f7;--muted:#929292;--green:#35ef70;--greenDark:#0e6a2d;--danger:#ff6b6b}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}body{min-height:100vh}
+:root{--bg:#000;--panel:#070707;--line:#292929;--text:#f7f7f7;--muted:#929292;--green:#35ef70}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{min-height:100vh}
 button,input,select{font:inherit}button{cursor:pointer}
 .top{max-width:1180px;margin:auto;padding:18px 24px 12px;position:sticky;top:0;z-index:20;background:rgba(0,0,0,.94);backdrop-filter:blur(16px);border-bottom:1px solid #181818}
-.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px}.brandwrap{display:flex;align-items:center;gap:12px}.home-logo{width:48px;height:48px;position:relative}.home-logo:before{content:'';position:absolute;left:6px;top:4px;width:28px;height:24px;border-left:5px solid var(--green);border-top:5px solid var(--green);transform:rotate(45deg);border-radius:4px}.home-logo:after{content:'';position:absolute;left:12px;top:21px;width:25px;height:21px;border:4px solid #fff;border-top:0;border-radius:2px}.brand{font-size:38px;line-height:1;font-weight:850;letter-spacing:-1.4px}.top-actions{display:flex;align-items:center;gap:14px}.iconbtn{width:46px;height:46px;border:0;background:transparent;color:#fff;font-size:28px;border-radius:50%;position:relative}.dot{position:absolute;right:5px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #35ef70}.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#162440;color:#fff;font-weight:800;font-size:19px}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brandwrap{display:flex;align-items:center;gap:12px}
+.home-logo{width:48px;height:48px;position:relative}
+.home-logo:before{content:'';position:absolute;left:6px;top:4px;width:28px;height:24px;border-left:5px solid var(--green);border-top:5px solid var(--green);transform:rotate(45deg);border-radius:4px}
+.home-logo:after{content:'';position:absolute;left:12px;top:21px;width:25px;height:21px;border:4px solid #fff;border-top:0;border-radius:2px}
+.brand{font-size:38px;line-height:1;font-weight:850;letter-spacing:-1.4px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.iconbtn{width:46px;height:46px;border:0;background:transparent;color:#fff;font-size:25px;border-radius:50%;position:relative}
+.dot{position:absolute;right:5px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #35ef70}
+.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#162440;color:#fff;font-weight:800;font-size:19px}
 .tag{margin-left:60px;color:#777;font-size:12px;margin-top:-4px}
-.addbar{margin-top:18px;border:1px solid #5a5a5a;border-radius:22px;background:#080808;height:62px;display:flex;align-items:center;gap:14px;padding:0 18px}.addbar button{border:0;background:transparent;color:#fff;font-size:35px;line-height:1}.addbar input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:19px}.addbar input::placeholder{color:#a5a5a5}.mic{font-size:27px!important}
-main{max-width:1180px;margin:auto;padding:18px 24px 110px}.section-title{font-size:24px;font-weight:800;margin:18px 4px 12px}.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{border:1px solid #242424;border-radius:17px;background:#070707;padding:14px}.stat b{font-size:25px}.stat span{display:block;color:#777;font-size:12px;margin-top:2px}
-.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.category-card{min-height:168px;border:1px solid #363636;border-radius:22px;background:#050505;position:relative;overflow:hidden;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:.18s}.category-card:hover{border-color:#606060;transform:translateY(-1px)}.category-card:before{content:'';position:absolute;inset:0;background-image:var(--pattern);background-repeat:repeat;background-size:108px 108px;opacity:.14;filter:grayscale(1);pointer-events:none}.category-card:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(0,0,0,.05),rgba(0,0,0,.8));pointer-events:none}.category-card>*{position:relative;z-index:1}.cat-icon{font-size:46px;line-height:1;filter:grayscale(1);margin-bottom:12px}.cat-name{font-size:20px;font-weight:800}.cat-count{margin-top:10px;padding:6px 12px;border-radius:99px;background:#0b5e2a;color:#b5ffc7;border:1px solid #16793b;font-size:12px;font-weight:800}
-.cat-vegetables:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Cellipse cx='28' cy='67' rx='8' ry='20'/%3E%3Cpath d='M28 47l-7-15m7 15l10-13M72 75c-10-14 3-32 16-24 7 4 8 14 2 22-6 8-12 9-18 2zM78 50l5-11'/%3E%3C/g%3E%3C/svg%3E")}.cat-medicine:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Crect x='43' y='12' width='22' height='58' rx='10' transform='rotate(35 54 41)'/%3E%3Cpath d='M45 25l14 10m-20 3l14 10'/%3E%3C/g%3E%3C/svg%3E")}.cat-grocery:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Cpath d='M22 39h64l-7 48H29zM33 39l8-19h26l8 19M40 55h28'/%3E%3C/g%3E%3C/svg%3E")}.cat-household:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Cpath d='M23 82h62M31 82V44h13v38m7 0V30h13v52m7 0V51h10v31'/%3E%3C/g%3E%3C/svg%3E")}.cat-milk:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Cpath d='M38 24h31l5 13v51H34V37zM38 24l-6-8h36l1 8M39 49h34M47 63h15'/%3E%3C/g%3E%3C/svg%3E")}.cat-bills:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Cpath d='M32 18h44v72H32zM41 34h26M41 48h26M41 62h19'/%3E%3C/g%3E%3C/svg%3E")}.cat-other:before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='108'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2'%3E%3Crect x='21' y='28' width='66' height='55' rx='6'/%3E%3Cpath d='M21 45h66M37 28v17m34-17v17'/%3E%3C/g%3E%3C/svg%3E")}
-.card{border:1px solid #242424;border-radius:20px;background:#070707;padding:18px;margin-top:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.quick button{border:1px solid #292929;background:#0b0b0b;color:#fff;border-radius:15px;padding:14px;text-align:left}.quick strong{display:block;font-size:20px;margin-bottom:5px}.muted{color:var(--muted)}
-.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 2px 10px}.sectionhead h2{margin:0;font-size:25px}.filter{border:1px solid #444;background:#050505;color:#fff;border-radius:14px;padding:10px 14px}.search{display:flex;gap:8px;margin-bottom:10px}.search input{flex:1}.input,.select{width:100%;background:#0b0b0b;border:1px solid #333;border-radius:12px;color:#fff;padding:13px;margin:5px 0 12px;outline:0}.primary{border:0;background:var(--green);color:#031006;border-radius:13px;padding:13px 17px;font-weight:850}.secondary{border:1px solid #383838;background:#111;color:#fff;border-radius:11px;padding:9px 13px;font-weight:700}.item{padding:16px 0;border-top:1px solid #202020}.item:first-child{border-top:0}.badge{display:inline-block;border:1px solid #333;background:#111;border-radius:99px;padding:5px 9px;font-size:12px}.success{color:#9effb7;border-color:#1c6b35}.danger{color:#ff8e8e}.small{font-size:12px}.chartbox{height:290px;position:relative}.empty{text-align:center;padding:22px;color:#777}.hidden{display:none!important}
-.bottom{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(4,4,4,.97);border-top:1px solid #292929;backdrop-filter:blur(15px);padding:8px max(12px,calc((100vw - 1180px)/2));display:grid;grid-template-columns:repeat(5,1fr)}.bottom button{border:0;background:transparent;color:#9b9b9b;font-size:11px;padding:6px 3px}.bottom button .bi{display:block;font-size:24px;line-height:1.1;margin-bottom:3px}.bottom button.active{color:var(--green)}.bottom .add-circle{width:54px;height:54px;border-radius:50%;background:var(--green);color:#031006;font-size:31px;display:grid;place-items:center;margin:-22px auto 0;border:4px solid #000}.notify{border:1px solid #204f2e;background:#09130c;padding:13px;border-radius:13px;margin-top:12px}
-@media(max-width:760px){.top{padding:14px 14px 10px}.brand{font-size:29px}.home-logo{width:38px;height:38px;transform:scale(.82);transform-origin:left center}.tag{margin-left:48px}.top-actions{gap:3px}.iconbtn,.avatar{width:40px;height:40px}.addbar{height:56px;margin-top:13px}.addbar input{font-size:16px}.addbar button{font-size:30px}main{padding:10px 12px 105px}.category-grid{grid-template-columns:repeat(2,1fr);gap:9px}.category-card{min-height:148px;padding:14px}.cat-icon{font-size:39px}.cat-name{font-size:17px}.hero-stats{gap:7px}.stat{padding:11px}.stat b{font-size:21px}.quick{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:390px){.brand{font-size:26px}.category-card{min-height:135px}.cat-name{font-size:15px}.cat-icon{font-size:34px}.top-actions .iconbtn{font-size:24px}}
+.addbar{margin-top:18px;border:1px solid #5a5a5a;border-radius:22px;background:#080808;height:62px;display:flex;align-items:center;gap:14px;padding:0 18px}
+.addbar button{border:0;background:transparent;color:#fff;font-size:35px;line-height:1}
+.addbar input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:19px}
+.addbar input::placeholder{color:#a5a5a5}
+main{max-width:1180px;margin:auto;padding:18px 24px 110px}
+.section-title{font-size:24px;font-weight:800;margin:18px 4px 12px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.stat{border:1px solid #242424;border-radius:17px;background:#070707;padding:14px}
+.stat b{font-size:25px}.stat span{display:block;color:#777;font-size:12px;margin-top:2px}
+.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.category-card{min-height:168px;border:1px solid #363636;border-radius:22px;background:#050505;position:relative;overflow:hidden;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer}
+.category-card:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(0,0,0,.05),rgba(0,0,0,.8));pointer-events:none}
+.category-card>*{position:relative;z-index:1}
+.cat-icon{font-size:46px;line-height:1;margin-bottom:12px}
+.cat-name{font-size:20px;font-weight:800}
+.cat-count{margin-top:10px;padding:6px 12px;border-radius:99px;background:#0b5e2a;color:#b5ffc7;border:1px solid #16793b;font-size:12px;font-weight:800}
+.card{border:1px solid #242424;border-radius:20px;background:#070707;padding:18px;margin-top:16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 2px 10px}
+.sectionhead h2{margin:0;font-size:25px}
+.filter{border:1px solid #444;background:#050505;color:#fff;border-radius:14px;padding:10px 14px}
+.input,.select{width:100%;background:#0b0b0b;border:1px solid #333;border-radius:12px;color:#fff;padding:13px;margin:5px 0 12px;outline:0}
+.primary{border:0;background:var(--green);color:#031006;border-radius:13px;padding:13px 17px;font-weight:850}
+.secondary{border:1px solid #383838;background:#111;color:#fff;border-radius:11px;padding:9px 13px;font-weight:700}
+.item{padding:16px 0;border-top:1px solid #202020}.item:first-child{border-top:0}
+.badge{display:inline-block;border:1px solid #333;background:#111;border-radius:99px;padding:5px 9px;font-size:12px}
+.success{color:#9effb7;border-color:#1c6b35}.muted{color:var(--muted)}.small{font-size:12px}
+.empty{text-align:center;padding:22px;color:#777}.hidden{display:none!important}
+.notify{border:1px solid #204f2e;background:#09130c;padding:13px;border-radius:13px;margin-top:12px}
+.chartbox{height:290px;position:relative}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(4,4,4,.97);border-top:1px solid #292929;backdrop-filter:blur(15px);padding:8px max(12px,calc((100vw - 1180px)/2));display:grid;grid-template-columns:repeat(5,1fr)}
+.bottom button{border:0;background:transparent;color:#9b9b9b;font-size:11px;padding:6px 3px}
+.bottom button .bi{display:block;font-size:24px;line-height:1.1;margin-bottom:3px}
+.bottom button.active{color:var(--green)}
+.bottom .add-circle{width:54px;height:54px;border-radius:50%;background:var(--green);color:#031006;font-size:31px;display:grid;place-items:center;margin:-22px auto 0;border:4px solid #000}
+@media(max-width:760px){
+.top{padding:14px 14px 10px}.brand{font-size:29px}.home-logo{width:38px;height:38px;transform:scale(.82);transform-origin:left center}
+.tag{margin-left:48px}.iconbtn,.avatar{width:40px;height:40px}.addbar{height:56px;margin-top:13px}.addbar input{font-size:16px}
+main{padding:10px 12px 105px}.category-grid{grid-template-columns:repeat(2,1fr);gap:9px}.category-card{min-height:148px;padding:14px}
+.cat-icon{font-size:39px}.cat-name{font-size:17px}.hero-stats{gap:7px}.stat{padding:11px}.stat b{font-size:21px}
+}
+@media(max-width:390px){.brand{font-size:26px}.category-card{min-height:135px}.cat-name{font-size:15px}.cat-icon{font-size:34px}}
 </style>
 </head>
 <body>
+
 <header class="top">
   <div class="toprow">
     <div class="brandwrap"><div class="home-logo"></div><div class="brand">HomeMate</div></div>
-    <div class="top-actions"><button class="iconbtn" onclick="setupMessaging()" aria-label="Notifications">♧<span class="dot"></span></button><button class="iconbtn" onclick="showTab('family')" aria-label="Family">♧</button><div class="avatar" id="avatar">S</div></div>
+    <div class="top-actions">
+      <button class="iconbtn" onclick="setupMessaging()" aria-label="Notifications">🔔<span class="dot"></span></button>
+      <button class="iconbtn" onclick="showTab('family')" aria-label="Family">👨‍👩‍👧</button>
+      <div class="avatar" id="avatar">S</div>
+    </div>
   </div>
   <div class="tag">Need it? Add it. Someone gets it.</div>
-  <div class="addbar"><button onclick="showTab('shopping');document.getElementById('itemName').focus()">＋</button><input id="quickAdd" placeholder="Add item (e.g. Milk, Tomato...)" onkeydown="if(event.key==='Enter')quickAddItem()"><button class="mic" onclick="document.getElementById('quickAdd').focus()">⌕</button></div>
+  <div class="addbar">
+    <button onclick="showTab('shopping');document.getElementById('itemName').focus()">＋</button>
+    <input id="quickAdd" placeholder="Add item (e.g. Milk, Tomato...)" onkeydown="if(event.key==='Enter')quickAddItem()">
+    <button onclick="document.getElementById('quickAdd').focus()">⌕</button>
+  </div>
 </header>
 
 <main>
 <section id="home">
   <div class="hero-stats">
-    <div class="stat"><b id="pending">0</b><span>Pending</span></div><div class="stat"><b id="picked">0</b><span>Picked</span></div><div class="stat"><b id="purchased">0</b><span>Purchased</span></div>
+    <div class="stat"><b id="pending">0</b><span>Pending</span></div>
+    <div class="stat"><b id="picked">0</b><span>Picked</span></div>
+    <div class="stat"><b id="purchased">0</b><span>Purchased</span></div>
   </div>
+
   <div class="section-title">Categories</div>
   <div class="category-grid">
-    <div class="category-card cat-vegetables" onclick="filterCategory('Vegetables')"><div class="cat-icon">🥕</div><div class="cat-name">Veggies</div><span class="cat-count" id="cat-Vegetables">0 items</span></div>
-    <div class="category-card cat-medicine" onclick="filterCategory('Medicine')"><div class="cat-icon">💊</div><div class="cat-name">Medicines</div><span class="cat-count" id="cat-Medicine">0 items</span></div>
-    <div class="category-card cat-grocery" onclick="filterCategory('Groceries')"><div class="cat-icon">🛒</div><div class="cat-name">Grocery</div><span class="cat-count" id="cat-Groceries">0 items</span></div>
-    <div class="category-card cat-household" onclick="filterCategory('Household')"><div class="cat-icon">🧹</div><div class="cat-name">Household</div><span class="cat-count" id="cat-Household">0 items</span></div>
-    <div class="category-card cat-milk" onclick="filterCategory('Milk')"><div class="cat-icon">🥛</div><div class="cat-name">Milks</div><span class="cat-count" id="cat-Milk">0 items</span></div>
-    <div class="category-card cat-bills" onclick="showTab('expenses')"><div class="cat-icon">🧾</div><div class="cat-name">Bills</div><span class="cat-count" id="cat-Bills">0 items</span></div>
-    <div class="category-card cat-other" onclick="filterCategory('Other')"><div class="cat-icon">📦</div><div class="cat-name">Others</div><span class="cat-count" id="cat-Other">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Vegetables')"><div class="cat-icon">🥕</div><div class="cat-name">Veggies</div><span class="cat-count" id="cat-Vegetables">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Medicine')"><div class="cat-icon">💊</div><div class="cat-name">Medicines</div><span class="cat-count" id="cat-Medicine">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Groceries')"><div class="cat-icon">🛒</div><div class="cat-name">Grocery</div><span class="cat-count" id="cat-Groceries">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Household')"><div class="cat-icon">🧹</div><div class="cat-name">Household</div><span class="cat-count" id="cat-Household">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Milk')"><div class="cat-icon">🥛</div><div class="cat-name">Milk</div><span class="cat-count" id="cat-Milk">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Bills')"><div class="cat-icon">🧾</div><div class="cat-name">Bills</div><span class="cat-count" id="cat-Bills">0 items</span></div>
+    <div class="category-card" onclick="filterCategory('Other')"><div class="cat-icon">📦</div><div class="cat-name">Others</div><span class="cat-count" id="cat-Other">0 items</span></div>
   </div>
-  <div class="sectionhead"><h2>Shopping List</h2><select class="filter" id="homeFilter" onchange="filterCategory(this.value)"><option value="All">All categories</option><option>Vegetables</option><option>Medicine</option><option>Groceries</option><option>Household</option><option>Milk</option><option>Other</option></select></div>
+
+  <div class="sectionhead">
+    <h2>Shopping List</h2>
+    <select class="filter" id="homeFilter" onchange="filterCategory(this.value)">
+      <option value="All">All categories</option><option>Vegetables</option><option>Medicine</option><option>Groceries</option><option>Household</option><option>Milk</option><option>Bills</option><option>Other</option>
+    </select>
+  </div>
   <div class="card" style="margin-top:0"><div id="recent"></div></div>
+
   <div class="card"><div class="row"><div><b>This month</b><div class="muted">Household spending</div></div><div style="font-size:26px;font-weight:850" id="monthTotal">₹0</div></div></div>
 </section>
 
 <section id="shopping" class="hidden">
-  <div class="card"><h2>Add shopping item</h2><label>Item</label><input class="input" id="itemName" placeholder="e.g. Rice"><label>Quantity</label><input class="input" id="itemQty" placeholder="e.g. 5 kg"><label>Category</label><select class="select" id="itemCategory"><option>Groceries</option><option>Vegetables</option><option>Fruits</option><option>Medicine</option><option>Household</option><option>Milk</option><option>Bills</option><option>Other</option></select><label>Added by</label><input class="input" id="addedBy" placeholder="e.g. Shrikant / Aai / Baba"><button class="primary" onclick="addItem()">Add to family list</button><div class="small muted" style="margin-top:9px">Everyone in the same Family ID sees the item in real time.</div></div>
-  <div class="sectionhead"><h2>Shopping List</h2><select class="filter" onchange="filterCategory(this.value)"><option value="All">All categories</option><option>Vegetables</option><option>Medicine</option><option>Groceries</option><option>Household</option><option>Milk</option><option>Bills</option><option>Other</option></select></div><div class="card" style="margin-top:0"><div id="items"></div></div>
+  <div class="card">
+    <h2>Add shopping item</h2>
+    <label>Item</label><input class="input" id="itemName" placeholder="e.g. Rice">
+    <label>Quantity</label><input class="input" id="itemQty" placeholder="e.g. 5 kg">
+    <label>Category</label>
+    <select class="select" id="itemCategory"><option>Groceries</option><option>Vegetables</option><option>Fruits</option><option>Medicine</option><option>Household</option><option>Milk</option><option>Bills</option><option>Other</option></select>
+    <label>Added by</label><input class="input" id="addedBy" placeholder="e.g. Shrikant / Aai / Baba">
+    <button class="primary" onclick="addItem()">Add to family list</button>
+    <div class="small muted" style="margin-top:9px">Everyone using the same Family ID sees the item in real time.</div>
+  </div>
+
+  <div class="sectionhead"><h2>Shopping List</h2></div>
+  <div class="card" style="margin-top:0"><div id="items"></div></div>
 </section>
 
-<section id="expenses" class="hidden"><div class="card"><h2>Household spending</h2><div style="font-size:30px;font-weight:850" id="expenseTotal">₹0</div><div class="muted">Total purchased amount</div></div><div class="card"><h2>Spending by category</h2><div class="chartbox"><canvas id="expenseChart"></canvas></div><div id="chartEmpty" class="empty hidden">No purchased expenses yet.</div></div><div class="card"><h2>Purchased items</h2><div id="purchasedList"></div></div></section>
+<section id="expenses" class="hidden">
+  <div class="card"><h2>Household spending</h2><div style="font-size:30px;font-weight:850" id="expenseTotal">₹0</div><div class="muted">Total purchased amount</div></div>
+  <div class="card"><h2>Spending by category</h2><div class="chartbox"><canvas id="expenseChart"></canvas></div><div id="chartEmpty" class="empty hidden">No purchased expenses yet.</div></div>
+  <div class="card"><h2>Purchased items</h2><div id="purchasedList"></div></div>
+</section>
 
-<section id="family" class="hidden"><div class="card"><h2>Family</h2><div class="muted">Use the same Family ID on every family member's phone.</div><label>Family ID</label><input class="input" id="familyIdInput" placeholder="e.g. pande-home"><button class="primary" onclick="changeFamily()">Save Family ID</button><p class="small muted">Signed in: <span id="uid"></span></p><div class="notify"><b>🔔 Notifications</b><div class="small muted">Enable notifications on this phone to receive HomeMate push messages.</div><button class="secondary" style="margin-top:8px" onclick="enableNotifications()">Enable notifications</button><div class="small muted" id="notifyStatus" style="margin-top:6px"></div></div></div></section>
+<section id="family" class="hidden">
+  <div class="card">
+    <h2>Family</h2>
+    <div class="muted">Use the same Family ID on every family member's phone.</div>
+    <label>Family ID</label><input class="input" id="familyIdInput" placeholder="e.g. Dudhane">
+    <button class="primary" onclick="changeFamily()">Save Family ID</button>
+    <p class="small muted">Signed in: <span id="uid"></span></p>
+    <div class="notify">
+      <b>🔔 Notifications</b>
+      <div class="small muted">Enable notifications on this phone.</div>
+      <button class="secondary" style="margin-top:8px" onclick="setupMessaging()">Enable notifications</button>
+      <div class="small muted" id="notifyStatus" style="margin-top:6px"></div>
+    </div>
+  </div>
+</section>
 </main>
 
-<nav class="bottom"><button data-tab="home" onclick="showTab('home')"><span class="bi">⌂</span>Home</button><button data-tab="shopping" onclick="showTab('shopping')"><span class="bi">☷</span>List</button><button onclick="showTab('shopping');document.getElementById('itemName').focus()"><span class="add-circle">＋</span>Add</button><button data-tab="expenses" onclick="showTab('expenses')"><span class="bi">▥</span>Bills</button><button data-tab="family" onclick="showTab('family')"><span class="bi">⚙</span>Settings</button></nav>
+<nav class="bottom">
+  <button data-tab="home" onclick="showTab('home')"><span class="bi">⌂</span>Home</button>
+  <button data-tab="shopping" onclick="showTab('shopping')"><span class="bi">☷</span>List</button>
+  <button onclick="showTab('shopping');document.getElementById('itemName').focus()"><span class="add-circle">＋</span>Add</button>
+  <button data-tab="expenses" onclick="showTab('expenses')"><span class="bi">▥</span>Bills</button>
+  <button data-tab="family" onclick="showTab('family')"><span class="bi">⚙</span>Settings</button>
+</nav>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
-import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-messaging.js";
-const firebaseConfig={apiKey:"AIzaSyBNYAQSmsWNei-1XReLVGBnc7WHN-0Gi4A",authDomain:"homemate-16f97.firebaseapp.com",projectId:"homemate-16f97",storageBucket:"homemate-16f97.firebasestorage.app",messagingSenderId:"446802934219",appId:"1:446802934219:web:9fcdd2a64cb5338d9b5e4"};
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);const vapidKey="BHLdJriqhNtpF5rDJwPhMGU0cisbXEs2IUmKss9LwNMdfomyQooKNuBcxNUeXl8osbmL2vmAGDgC1gicrL6JZHo";let messaging=null,user=null,items=[],unsub=null,chart=null,currentFilter="All";let familyId=localStorage.getItem("homemate_family")||"pande-home";document.getElementById("familyIdInput").value=familyId;
-window.showTab=tab=>{document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(tab).classList.remove("hidden");document.querySelectorAll(".bottom button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="expenses")renderChart();window.scrollTo({top:0,behavior:"smooth"})};showTab("home");
-onAuthStateChanged(auth,u=>{user=u;if(u){document.getElementById("uid").textContent=u.uid;listen()}});signInAnonymously(auth).catch(e=>console.error(e));
-function path(){return collection(db,"families",familyId,"items")};let notificationListenerReady = false;
+import { getMessaging, getToken, isSupported } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-messaging.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyBNYAQSmsNei-1XReLVGBnc7WHN-0Gi4A",
+  authDomain:"homemate-16f97.firebaseapp.com",
+  projectId:"homemate-16f97",
+  storageBucket:"homemate-16f97.firebasestorage.app",
+  messagingSenderId:"446802934219",
+  appId:"1:446802934219:web:9fcdd2a64cb5338d9b5e4"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const vapidKey="BHLdJriqhNtpF5rDJwPhMGU0cisbXEs2IUmKss9LwNMdfomyQooKNuBcxNUeXl8osbmL2vmAGDgC1gicrL6JZHo";
+
+let user=null,items=[],unsub=null,chart=null,currentFilter="All";
+let familyId=localStorage.getItem("homemate_family")||"Dudhane";
+document.getElementById("familyIdInput").value=familyId;
+
+const pendingEl=document.getElementById("pending");
+const pickedEl=document.getElementById("picked");
+const purchasedEl=document.getElementById("purchased");
+const monthTotal=document.getElementById("monthTotal");
+const expenseTotal=document.getElementById("expenseTotal");
+const recent=document.getElementById("recent");
+const itemsEl=document.getElementById("items");
+const purchasedList=document.getElementById("purchasedList");
+const expenses=document.getElementById("expenses");
+
+window.showTab=function(tab){
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(tab).classList.remove("hidden");
+  document.querySelectorAll(".bottom button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  if(tab==="expenses") renderChart();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+showTab("home");
+
+onAuthStateChanged(auth,u=>{
+  user=u;
+  if(u){
+    document.getElementById("uid").textContent=u.uid;
+    listen();
+  }
+});
+signInAnonymously(auth).catch(e=>console.error(e));
+
+function path(){
+  return collection(db,"families",familyId,"items");
+}
+
+let notificationListenerReady=false;
+
 function listen(){
   if(unsub) unsub();
+  notificationListenerReady=false;
 
-  notificationListenerReady = false;
+  const q=query(path(),orderBy("createdAt","desc"));
 
-  const q = query(path(), orderBy("createdAt","desc"));
-
-  unsub = onSnapshot(q, s => {
-
+  unsub=onSnapshot(q,s=>{
     if(notificationListenerReady){
-
-      const added = s.docChanges().filter(c => c.type === "added");
-
-      added.forEach(change => {
-
-        const item = change.doc.data();
-
-        if(Notification.permission === "granted"){
-
-          navigator.serviceWorker.ready.then(reg => {
-  reg.showNotification("🛒 HomeMate", {
-    body: `${item.addedBy || "Someone"} ने ${item.name || "नवीन item"} add केला.`
-  });
-});
-
+      s.docChanges().filter(c=>c.type==="added").forEach(change=>{
+        const item=change.doc.data();
+        if(Notification.permission==="granted"){
+          navigator.serviceWorker.ready.then(reg=>{
+            reg.showNotification("🛒 HomeMate",{
+              body:`${item.addedBy||"Someone"} ने ${item.name||"नवीन item"} add केला.`
+            });
+          }).catch(()=>{
+            new Notification("🛒 HomeMate",{
+              body:`${item.addedBy||"Someone"} ने ${item.name||"नवीन item"} add केला.`
+            });
+          });
         }
-
       });
     }
 
-    items = s.docs.map(d => ({
-      id: d.id,
-      ...d.data()
-    }));
-
+    items=s.docs.map(d=>({id:d.id,...d.data()}));
     render();
-
-    notificationListenerReady = true;
-
-  }, e => console.error(e));
+    notificationListenerReady=true;
+  },e=>console.error("Firestore listener error:",e));
 }
-};function safe(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-window.quickAddItem=()=>{const n=document.getElementById("quickAdd").value.trim();if(!n)return;showTab("shopping");document.getElementById("itemName").value=n;document.getElementById("itemName").focus();document.getElementById("quickAdd").value=""};
-window.addItem=async()=>{const name=document.getElementById("itemName").value.trim(),qty=document.getElementById("itemQty").value.trim(),category=document.getElementById("itemCategory").value,addedBy=document.getElementById("addedBy").value.trim()||"Unknown";if(!name){alert("Item name enter करा.");return}await addDoc(path(),{name,qty,category,addedBy,status:"pending",pickedBy:"",price:0,createdAt:serverTimestamp()});document.getElementById("itemName").value="";document.getElementById("itemQty").value=""};
-window.pickItem=async id=>{const x=items.find(i=>i.id===id);if(!x)return;if(x.status==="purchased")return;const who=prompt("हा item कोण घेणार आहे?","Me");if(!who)return;if(x.status==="picked"&&x.pickedBy&&x.pickedBy!==who){alert("हा item आधीच "+x.pickedBy+" ने pick केला आहे.");return}await updateDoc(doc(db,"families",familyId,"items",id),{status:"picked",pickedBy:who})};
-window.purchaseItem=async id=>{const x=items.find(i=>i.id===id);if(!x)return;const p=prompt("Actual price किती?","0");if(p===null)return;await updateDoc(doc(db,"families",familyId,"items",id),{status:"purchased",price:Number(p)||0,purchasedAt:serverTimestamp()})};
-function render(){const pending=items.filter(x=>x.status!=="purchased"&&x.status!=="picked").length,picked=items.filter(x=>x.status==="picked").length,purchased=items.filter(x=>x.status==="purchased").length,total=items.reduce((s,x)=>s+(x.status==="purchased"?(Number(x.price)||0):0),0);pendingEl.textContent=pending;pickedEl.textContent=picked;purchasedEl.textContent=purchased;monthTotal.textContent="₹"+total;expenseTotal.textContent="₹"+total;["Vegetables","Medicine","Groceries","Household","Milk","Bills","Other"].forEach(c=>{const el=document.getElementById("cat-"+c);if(el)el.textContent=items.filter(x=>(x.category||"Other")===c&&x.status!=="purchased").length+" items"});recent.innerHTML=(currentFilter==="All"?items:items.filter(x=>(x.category||"Other")===currentFilter)).slice(0,5).map(itemCard).join("")||'<div class="empty">No items yet.</div>';const vis=currentFilter==="All"?items:items.filter(x=>(x.category||"Other")===currentFilter);itemsEl.innerHTML=vis.map(itemCard).join("")||'<div class="empty">No items in this category.</div>';const ps=items.filter(x=>x.status==="purchased");purchasedList.innerHTML=ps.map(x=>`<div class="item"><div class="row"><b>${safe(x.name)}</b><b>₹${Number(x.price)||0}</b></div><div class="small muted">${safe(x.qty)} • ${safe(x.category)} • Added by ${safe(x.addedBy||"Unknown")}</div></div>`).join("")||'<div class="empty">No purchases yet.</div>';if(!expenses.classList.contains("hidden"))renderChart()}
-const pendingEl=document.getElementById("pending"),pickedEl=document.getElementById("picked"),purchasedEl=document.getElementById("purchased"),monthTotal=document.getElementById("monthTotal"),expenseTotal=document.getElementById("expenseTotal"),recent=document.getElementById("recent"),itemsEl=document.getElementById("items"),purchasedList=document.getElementById("purchasedList"),expenses=document.getElementById("expenses");
-function itemCard(x){const status=x.status==="purchased"?'<span class="badge success">✓ Purchased</span>':x.status==="picked"?'<span class="badge">✓ Picked by '+safe(x.pickedBy)+'</span>':'<span class="badge">Pending</span>';let b=x.status==="purchased"?"":x.status==="picked"?`<button class="secondary" onclick="purchaseItem('${x.id}')">Mark purchased</button>`:`<button class="secondary" onclick="pickItem('${x.id}')">Pick item</button>`;return `<div class="item"><div class="row"><div><b>${safe(x.name)}</b><div class="small muted">${safe(x.qty)} • ${safe(x.category)}</div><div class="small muted">Added by <b>${safe(x.addedBy||"Unknown")}</b></div></div><div>${status}</div></div><div style="margin-top:10px">${b}</div></div>`}
-window.filterCategory=cat=>{currentFilter=cat;document.querySelectorAll("select.filter").forEach(s=>s.value=cat);showTab("shopping");render()};
-function renderChart(){const sums={};items.filter(x=>x.status==="purchased").forEach(x=>sums[x.category||"Other"]=(sums[x.category||"Other"]||0)+(Number(x.price)||0));const labels=Object.keys(sums),data=labels.map(k=>sums[k]);document.getElementById("chartEmpty").classList.toggle("hidden",data.length>0);document.getElementById("expenseChart").classList.toggle("hidden",data.length===0);if(chart)chart.destroy();if(!data.length)return;chart=new Chart(document.getElementById("expenseChart"),{type:"doughnut",data:{labels,datasets:[{data}]},options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{color:"#ddd"}}}}})}
-window.changeFamily=()=>{const id=document.getElementById("familyIdInput").value.trim();if(!id)return;familyId=id;localStorage.setItem("homemate_family",id);listen();alert("Family ID saved: "+id)};
-window.setupMessaging = async function(){
+
+function safe(v){
+  return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+window.quickAddItem=function(){
+  const n=document.getElementById("quickAdd").value.trim();
+  if(!n)return;
+  showTab("shopping");
+  document.getElementById("itemName").value=n;
+  document.getElementById("itemName").focus();
+  document.getElementById("quickAdd").value="";
+};
+
+window.addItem=async function(){
+  const name=document.getElementById("itemName").value.trim();
+  const qty=document.getElementById("itemQty").value.trim();
+  const category=document.getElementById("itemCategory").value;
+  const addedBy=document.getElementById("addedBy").value.trim()||"Unknown";
+  if(!name){alert("Item name enter करा.");return;}
+  try{
+    await addDoc(path(),{
+      name,qty,category,addedBy,status:"pending",pickedBy:"",price:0,createdAt:serverTimestamp()
+    });
+    document.getElementById("itemName").value="";
+    document.getElementById("itemQty").value="";
+  }catch(e){
+    alert("Item add झाला नाही: "+e.message);
+  }
+};
+
+window.pickItem=async function(id){
+  const x=items.find(i=>i.id===id);
+  if(!x||x.status==="purchased")return;
+  const who=prompt("हा item कोण घेणार आहे?","Me");
+  if(!who)return;
+  if(x.status==="picked"&&x.pickedBy&&x.pickedBy!==who){
+    alert("हा item आधीच "+x.pickedBy+" ने pick केला आहे.");
+    return;
+  }
+  await updateDoc(doc(db,"families",familyId,"items",id),{status:"picked",pickedBy:who});
+};
+
+window.purchaseItem=async function(id){
+  const x=items.find(i=>i.id===id);
+  if(!x)return;
+  const p=prompt("Actual price किती?","0");
+  if(p===null)return;
+  await updateDoc(doc(db,"families",familyId,"items",id),{status:"purchased",price:Number(p)||0,purchasedAt:serverTimestamp()});
+};
+
+function render(){
+  const pending=items.filter(x=>x.status!=="purchased"&&x.status!=="picked").length;
+  const picked=items.filter(x=>x.status==="picked").length;
+  const purchased=items.filter(x=>x.status==="purchased").length;
+  const total=items.reduce((s,x)=>s+(x.status==="purchased"?(Number(x.price)||0):0),0);
+
+  pendingEl.textContent=pending;
+  pickedEl.textContent=picked;
+  purchasedEl.textContent=purchased;
+  monthTotal.textContent="₹"+total;
+  expenseTotal.textContent="₹"+total;
+
+  ["Vegetables","Medicine","Groceries","Household","Milk","Bills","Other"].forEach(c=>{
+    const el=document.getElementById("cat-"+c);
+    if(el)el.textContent=items.filter(x=>(x.category||"Other")===c&&x.status!=="purchased").length+" items";
+  });
+
+  const visible=currentFilter==="All"?items:items.filter(x=>(x.category||"Other")===currentFilter);
+  recent.innerHTML=visible.slice(0,5).map(itemCard).join("")||'<div class="empty">No items yet.</div>';
+  itemsEl.innerHTML=visible.map(itemCard).join("")||'<div class="empty">No items in this category.</div>';
+
+  const ps=items.filter(x=>x.status==="purchased");
+  purchasedList.innerHTML=ps.map(x=>`<div class="item"><div class="row"><b>${safe(x.name)}</b><b>₹${Number(x.price)||0}</b></div><div class="small muted">${safe(x.qty)} • ${safe(x.category)} • Added by ${safe(x.addedBy||"Unknown")}</div></div>`).join("")||'<div class="empty">No purchases yet.</div>';
+
+  if(!expenses.classList.contains("hidden"))renderChart();
+}
+
+function itemCard(x){
+  const status=x.status==="purchased"
+    ?'<span class="badge success">✓ Purchased</span>'
+    :x.status==="picked"
+    ?`<span class="badge">✓ Picked by ${safe(x.pickedBy)}</span>`
+    :'<span class="badge">Pending</span>';
+
+  const button=x.status==="purchased"
+    ?""
+    :x.status==="picked"
+    ?`<button class="secondary" onclick="purchaseItem('${x.id}')">Mark purchased</button>`
+    :`<button class="secondary" onclick="pickItem('${x.id}')">Pick item</button>`;
+
+  return `<div class="item">
+    <div class="row">
+      <div>
+        <b>${safe(x.name)}</b>
+        <div class="small muted">${safe(x.qty)} • ${safe(x.category)}</div>
+        <div class="small muted">Added by <b>${safe(x.addedBy||"Unknown")}</b></div>
+      </div>
+      <div>${status}</div>
+    </div>
+    <div style="margin-top:10px">${button}</div>
+  </div>`;
+}
+
+window.filterCategory=function(cat){
+  currentFilter=cat;
+  document.querySelectorAll("select.filter").forEach(s=>s.value=cat);
+  showTab("shopping");
+  render();
+};
+
+function renderChart(){
+  const sums={};
+  items.filter(x=>x.status==="purchased").forEach(x=>{
+    sums[x.category||"Other"]=(sums[x.category||"Other"]||0)+(Number(x.price)||0);
+  });
+  const labels=Object.keys(sums);
+  const data=labels.map(k=>sums[k]);
+  document.getElementById("chartEmpty").classList.toggle("hidden",data.length>0);
+  document.getElementById("expenseChart").classList.toggle("hidden",data.length===0);
+  if(chart)chart.destroy();
+  if(!data.length)return;
+  chart=new Chart(document.getElementById("expenseChart"),{
+    type:"doughnut",
+    data:{labels,datasets:[{data}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{color:"#ddd"}}}}
+  });
+}
+
+window.changeFamily=function(){
+  const id=document.getElementById("familyIdInput").value.trim();
+  if(!id)return;
+  familyId=id;
+  localStorage.setItem("homemate_family",id);
+  listen();
+  alert("Family ID saved: "+id);
+};
+
+window.setupMessaging=async function(){
   try{
     if(!(await isSupported())){
       alert("Notifications are not supported on this browser.");
       return;
     }
-
-    const permission = await Notification.requestPermission();
-
-    if(permission !== "granted"){
+    const permission=await Notification.requestPermission();
+    if(permission!=="granted"){
       alert("Notification permission denied.");
       return;
     }
 
-    const reg = await navigator.serviceWorker.register(
-      "/HomeMate/firebase-messaging-sw.js"
-    );
-
-    const messaging = getMessaging(app);
-
-    const token = await getToken(messaging,{
-      vapidKey,
-      serviceWorkerRegistration: reg
-    });
+    const reg=await navigator.serviceWorker.register("/HomeMate/firebase-messaging-sw.js");
+    const messaging=getMessaging(app);
+    const token=await getToken(messaging,{vapidKey,serviceWorkerRegistration:reg});
 
     if(token){
       localStorage.setItem("homemate_fcm_token",token);
 
-      const tokenHashBuffer = await crypto.subtle.digest(
-        "SHA-256",
-        new TextEncoder().encode(token)
+      const tokenHashBuffer=await crypto.subtle.digest(
+        "SHA-256",new TextEncoder().encode(token)
       );
-
-      const tokenHash = Array.from(
-        new Uint8Array(tokenHashBuffer)
-      ).map(b => b.toString(16).padStart(2,"0")).join("");
+      const tokenHash=Array.from(new Uint8Array(tokenHashBuffer))
+        .map(b=>b.toString(16).padStart(2,"0")).join("");
 
       await setDoc(
         doc(db,"families",familyId,"tokens",tokenHash),
-        {
-          token: token,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        },
+        {token,createdAt:serverTimestamp(),updatedAt:serverTimestamp()},
         {merge:true}
       );
 
+      document.getElementById("notifyStatus").textContent="Notifications enabled 🔔";
       alert("Notifications enabled successfully 🔔");
     }
   }catch(e){
     console.error(e);
-    alert("Notification setup failed: " + e.message);
+    alert("Notification setup failed: "+e.message);
   }
-}
+};
 </script>
 </body>
-  </html>
+</html>
+'''
+
+path = Path("/mnt/data/HomeMate_fresh_index.html")
+path.write_text(html, encoding="utf-8")
+print(path)
