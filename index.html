@@ -75,7 +75,29 @@ const firebaseConfig={apiKey:"AIzaSyBNYAQSmsWNei-1XReLVGBnc7WHN-0Gi4A",authDomai
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);const vapidKey="BHLdJriqhNtpF5rDJwPhMGU0cisbXEs2IUmKss9LwNMdfomyQooKNuBcxNUeXl8osbmL2vmAGDgC1gicrL6JZHo";let messaging=null,user=null,items=[],unsub=null,chart=null,currentFilter="All";let familyId=localStorage.getItem("homemate_family")||"pande-home";document.getElementById("familyIdInput").value=familyId;
 window.showTab=tab=>{document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(tab).classList.remove("hidden");document.querySelectorAll(".bottom button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="expenses")renderChart();window.scrollTo({top:0,behavior:"smooth"})};showTab("home");
 onAuthStateChanged(auth,u=>{user=u;if(u){document.getElementById("uid").textContent=u.uid;listen()}});signInAnonymously(auth).catch(e=>console.error(e));
-function path(){return collection(db,"families",familyId,"items")};function listen(){if(unsub)unsub();const q=query(path(),orderBy("createdAt","desc"));unsub=onSnapshot(q,s=>{items=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>console.error(e))};function safe(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function path(){return collection(db,"families",familyId,"items")};function listen(){
+  if(unsub)unsub();
+
+  const q=query(path(),orderBy("createdAt","desc"));
+
+  unsub=onSnapshot(q,s=>{
+    const firstLoad = items.length === 0;
+
+    items=s.docs.map(d=>({id:d.id,...d.data()}));
+
+    if(!firstLoad && items.length > 0){
+      const newest=items[0];
+
+      if(Notification.permission==="granted"){
+        new Notification("🛒 HomeMate",{
+          body:`${newest.addedBy||"Someone"} ने ${newest.name||"नवीन item"} add केला.`
+        });
+      }
+    }
+
+    render();
+  },e=>console.error(e));
+};function safe(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 window.quickAddItem=()=>{const n=document.getElementById("quickAdd").value.trim();if(!n)return;showTab("shopping");document.getElementById("itemName").value=n;document.getElementById("itemName").focus();document.getElementById("quickAdd").value=""};
 window.addItem=async()=>{const name=document.getElementById("itemName").value.trim(),qty=document.getElementById("itemQty").value.trim(),category=document.getElementById("itemCategory").value,addedBy=document.getElementById("addedBy").value.trim()||"Unknown";if(!name){alert("Item name enter करा.");return}await addDoc(path(),{name,qty,category,addedBy,status:"pending",pickedBy:"",price:0,createdAt:serverTimestamp()});document.getElementById("itemName").value="";document.getElementById("itemQty").value=""};
 window.pickItem=async id=>{const x=items.find(i=>i.id===id);if(!x)return;if(x.status==="purchased")return;const who=prompt("हा item कोण घेणार आहे?","Me");if(!who)return;if(x.status==="picked"&&x.pickedBy&&x.pickedBy!==who){alert("हा item आधीच "+x.pickedBy+" ने pick केला आहे.");return}await updateDoc(doc(db,"families",familyId,"items",id),{status:"picked",pickedBy:who})};
